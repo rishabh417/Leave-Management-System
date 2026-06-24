@@ -1,7 +1,6 @@
 package com.rishabh.leave_management_system.controller;
 
 import com.rishabh.leave_management_system.entity.Leave;
-import com.rishabh.leave_management_system.repository.LeaveRepository;
 import com.rishabh.leave_management_system.service.LeaveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +16,7 @@ public class LeaveController {
 
     @PostMapping
     public Leave applyLeave(@RequestBody Leave leave){
-        leaveService.applyLeave(leave);
-        return leave;
+        return leaveService.applyLeave(leave);
     }
 
     @GetMapping
@@ -26,9 +24,25 @@ public class LeaveController {
         return leaveService.getAllLeave();
     }
 
-    @GetMapping("/{id}")
-    public List<Leave> getLeaveByEmployeeId(@PathVariable String id){
-        return leaveService.getLeaveByEmployeeId(id);
+    @GetMapping("/employee/{employeeId}")
+    public List<Leave> getLeaveByEmployeeId(@PathVariable String employeeId){
+        return leaveService.getLeaveByEmployeeId(employeeId);
     }
+
+    @GetMapping("/id/{id}")
+    public Leave getLeaveById(@PathVariable String id){
+        return leaveService.getLeaveById(id);
+    }
+
+    @PutMapping("approve/{leaveId}")
+    public Leave approveLeave(@PathVariable String leaveId){
+        return leaveService.approveLeave(leaveId);
+    }
+
+    @PutMapping("reject/{leaveId}")
+    public Leave rejectLeave(@PathVariable String leaveId){
+        return leaveService.rejectLeave(leaveId);
+    }
+
 
 }
