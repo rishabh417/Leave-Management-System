@@ -3,6 +3,7 @@ package com.rishabh.leave_management_system.controller;
 import com.rishabh.leave_management_system.entity.Leave;
 import com.rishabh.leave_management_system.service.LeaveService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class LeaveController {
         return leaveService.applyLeave(leave);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public List<Leave> getAllLeave(){
         return leaveService.getAllLeave();
@@ -34,15 +36,23 @@ public class LeaveController {
         return leaveService.getLeaveById(id);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("approve/{leaveId}")
     public Leave approveLeave(@PathVariable String leaveId){
         return leaveService.approveLeave(leaveId);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("reject/{leaveId}")
     public Leave rejectLeave(@PathVariable String leaveId){
         return leaveService.rejectLeave(leaveId);
     }
 
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("delete/{leaveId}")
+    public void deleteLeave(@PathVariable String leaveId){
+         leaveService.deleteLeave(leaveId);
+    }
 
 }

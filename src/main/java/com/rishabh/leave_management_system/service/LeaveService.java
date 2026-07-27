@@ -58,4 +58,13 @@ public class LeaveService {
         leave.setStatus(LeaveStatus.REJECTED);
         return leaveRepository.save(leave);
     }
+
+    public void deleteLeave(String leaveId){
+
+        Leave leave = leaveRepository.findById(leaveId).orElse(null);
+        if(leave == null) throw new LeaveNotFoundException("Leave for the given leave id not found");
+
+        leaveRepository.deleteById(leaveId);
+    }
+
 }
