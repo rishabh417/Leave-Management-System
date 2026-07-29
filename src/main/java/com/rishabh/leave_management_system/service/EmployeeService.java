@@ -1,6 +1,5 @@
 package com.rishabh.leave_management_system.service;
 
-import com.rishabh.leave_management_system.config.PasswordConfig;
 import com.rishabh.leave_management_system.entity.Employee;
 import com.rishabh.leave_management_system.exception.EmployeeNotFoundException;
 import com.rishabh.leave_management_system.repository.EmployeeRepository;
@@ -51,7 +50,7 @@ public class EmployeeService {
             employee.setName(newEmployee.getName());
             employee.setEmail(newEmployee.getEmail());
             employee.setDepartment(newEmployee.getDepartment());
-            employee.setPassword(newEmployee.getPassword());
+            employee.setPassword(passwordEncoder.encode(newEmployee.getPassword()));
 
             employeeRepository.save(employee);
             return employee;
