@@ -1,6 +1,7 @@
 package com.rishabh.leave_management_system.config;
 
 import com.rishabh.leave_management_system.security.EmployeeUserDetailsService;
+import com.rishabh.leave_management_system.security.JWTAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -11,8 +12,10 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
 @Configuration
@@ -21,10 +24,12 @@ public class SecurityConfig {
 
     private final EmployeeUserDetailsService employeeUserDetailsService;
     private final PasswordEncoder passwordEncoder;
+    private final JWTAuthenticationFilter jwtAuthenticationFilter;
 
-    public SecurityConfig(EmployeeUserDetailsService employeeUserDetailsService, PasswordEncoder passwordEncoder){
+    public SecurityConfig(EmployeeUserDetailsService employeeUserDetailsService, PasswordEncoder passwordEncoder, JWTAuthenticationFilter jwtAuthenticationFilter){
         this.employeeUserDetailsService = employeeUserDetailsService;
         this.passwordEncoder = passwordEncoder;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
     @Bean
@@ -36,7 +41,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/employee").permitAll()
                         .anyRequest().authenticated()
                 )
-                .httpBasic(Customizer.withDefaults());
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
 
