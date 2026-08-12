@@ -1,5 +1,6 @@
 package com.rishabh.leave_management_system.security;
 
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,21 +32,33 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
+        try {
+
         String jwt = authHeader.substring(7);
         String username = jwtService.extractUsername(jwt);
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-        if(jwtService.isTokenValid(jwt,userDetails)){
-            UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(
-                            userDetails,
-                            null,
-                            userDetails.getAuthorities()
-                    );
+            if(jwtService.isTokenValid(jwt,userDetails)){
+                UsernamePasswordAuthenticationToken authenticationToken =
+                        new UsernamePasswordAuthenticationToken(
+                                userDetails,
+                                null,
+                                userDetails.getAuthorities()
+                        );
 
-            SecurityContextHolder.getContext()
-                    .setAuthentication(authenticationToken);
+                SecurityContextHolder.getContext()
+                        .setAuthentication(authenticationToken);
+            }
+            else{
+                response.setStatus(401);
+                response.getWriter().println("Invalid JWT token");
+                return;
+            }
+        } catch (JwtException e) {
+            response.setStatus(401);
+            response.getWriter().println("Invalid JWT token");
+            return;
         }
 
         filterChain.doFilter(request,response);

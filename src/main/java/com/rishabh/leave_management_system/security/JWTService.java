@@ -22,7 +22,7 @@ public class JWTService {
         return Jwts.builder()
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60)) // Token valid for 1 hours
+                .expiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60)) // Token valid for 60 minute
                 .signWith(secretKey)
                 .compact();
     }

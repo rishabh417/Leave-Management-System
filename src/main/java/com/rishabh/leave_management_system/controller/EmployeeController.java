@@ -1,11 +1,14 @@
 package com.rishabh.leave_management_system.controller;
 
-import com.rishabh.leave_management_system.entity.Employee;
+import com.rishabh.leave_management_system.dto.EmployeeRequestDTO;
+import com.rishabh.leave_management_system.dto.EmployeeResponseDTO;
+import com.rishabh.leave_management_system.dto.EmployeeUpdateRequestDTO;
 import com.rishabh.leave_management_system.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @RestController
@@ -16,18 +19,18 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @PostMapping
-    public Employee createEmployee(@RequestBody Employee employee){
-        return employeeService.saveEmployee(employee);
+    public EmployeeResponseDTO createEmployee(@RequestBody EmployeeRequestDTO employeeRequest){
+        return employeeService.saveEmployee(employeeRequest);
     }
 
     @GetMapping("/{id}")
-    public Employee getEmployeeById(@PathVariable String id){
+    public EmployeeResponseDTO getEmployeeById(@PathVariable String id){
         return employeeService.getEmployeeById(id);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
-    public List<Employee> getAllEmployees(){
+    public List<EmployeeResponseDTO> getAllEmployees(){
         return employeeService.getAllEmployee();
     }
 
@@ -37,9 +40,9 @@ public class EmployeeController {
          employeeService.deleteByid(id);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     @PutMapping("/{id}")
-    public Employee updateEmployee(@RequestBody Employee employee,@PathVariable String id){
+    public EmployeeResponseDTO updateEmployee(@RequestBody EmployeeUpdateRequestDTO employee, @PathVariable String id){
         return employeeService.updateById(employee,id);
     }
 
