@@ -110,6 +110,11 @@ public class EmployeeService {
                 throw new AccessDeniedException("You are not allowed to perform this action");
             }
 
+            // checking if employee is trying to access fields not allowed to.
+            if(!isAdmin && ( newEmployee.getRole() != null || newEmployee.getDepartment() != null)) {
+                throw new AccessDeniedException("You are not allowed to perform this action");
+            }
+
 
             // Both employee and admin can update these
             if(newEmployee.getName() != null && !newEmployee.getName().isEmpty()){

@@ -7,8 +7,6 @@ import com.rishabh.leave_management_system.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @RestController
