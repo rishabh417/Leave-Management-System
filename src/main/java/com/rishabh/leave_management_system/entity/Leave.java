@@ -1,6 +1,7 @@
 package com.rishabh.leave_management_system.entity;
 
 import com.rishabh.leave_management_system.entity.enums.LeaveStatus;
+import com.rishabh.leave_management_system.entity.enums.LeaveType;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,7 +13,7 @@ public class Leave {
     @Id
     private String id;
     private String employeeId;
-    private String leaveType;
+    private LeaveType leaveType;
     private LocalDate startDate;
     private LocalDate endDate;
     private String reason;
@@ -36,11 +37,11 @@ public class Leave {
         this.employeeId = employeeId;
     }
 
-    public String getLeaveType() {
+    public LeaveType getLeaveType() {
         return leaveType;
     }
 
-    public void setLeaveType(String leaveType) {
+    public void setLeaveType(LeaveType leaveType) {
         this.leaveType = leaveType;
     }
 

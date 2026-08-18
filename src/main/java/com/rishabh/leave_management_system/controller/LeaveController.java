@@ -1,11 +1,12 @@
 package com.rishabh.leave_management_system.controller;
-
+import com.rishabh.leave_management_system.dto.LeaveRequestDTO;
+import com.rishabh.leave_management_system.dto.LeaveResponseDTO;
 import com.rishabh.leave_management_system.entity.Leave;
 import com.rishabh.leave_management_system.service.LeaveService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -16,8 +17,8 @@ public class LeaveController {
     private LeaveService leaveService;
 
     @PostMapping
-    public Leave applyLeave(@RequestBody Leave leave){
-        return leaveService.applyLeave(leave);
+    public LeaveResponseDTO applyLeave(@Valid @RequestBody LeaveRequestDTO leaveRequest){
+        return leaveService.applyLeave(leaveRequest);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -27,12 +28,14 @@ public class LeaveController {
     }
 
     @GetMapping("/employee/{employeeId}")
-    public List<Leave> getLeaveByEmployeeId(@PathVariable String employeeId){
+    public List<LeaveResponseDTO> getLeaveByEmployeeId(@PathVariable String employeeId){
+
         return leaveService.getLeaveByEmployeeId(employeeId);
+
     }
 
     @GetMapping("/id/{id}")
-    public Leave getLeaveById(@PathVariable String id){
+    public LeaveResponseDTO getLeaveById(@PathVariable String id){
         return leaveService.getLeaveById(id);
     }
 
