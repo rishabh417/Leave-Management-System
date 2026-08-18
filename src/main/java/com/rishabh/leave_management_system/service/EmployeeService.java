@@ -101,6 +101,7 @@ public class EmployeeService {
             Employee employee = oldEmployee.get();
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
             String currentUser = authentication.getName();
             boolean isAdmin = authentication.getAuthorities().
                     stream().
