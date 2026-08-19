@@ -23,7 +23,7 @@ public class LeaveController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
-    public List<Leave> getAllLeave(){
+    public List<LeaveResponseDTO> getAllLeave(){
         return leaveService.getAllLeave();
     }
 
@@ -41,13 +41,13 @@ public class LeaveController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("approve/{leaveId}")
-    public Leave approveLeave(@PathVariable String leaveId){
+    public LeaveResponseDTO approveLeave(@PathVariable String leaveId){
         return leaveService.approveLeave(leaveId);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("reject/{leaveId}")
-    public Leave rejectLeave(@PathVariable String leaveId){
+    public LeaveResponseDTO rejectLeave(@PathVariable String leaveId){
         return leaveService.rejectLeave(leaveId);
     }
 

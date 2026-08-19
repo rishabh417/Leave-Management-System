@@ -8,7 +8,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
@@ -31,7 +30,7 @@ public class GlobalExceptionHandler  {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponseDTO> handleVaidationException(MethodArgumentNotValidException ex){
+    public ResponseEntity<ErrorResponseDTO> handleValidationException(MethodArgumentNotValidException ex){
 
         Map<String,String> errors = new HashMap<>();
         for(FieldError fieldError : ex.getBindingResult().getFieldErrors()){
@@ -62,6 +61,58 @@ public class GlobalExceptionHandler  {
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)
                 .body(errorResponseDTO);
+    }
+
+    @ExceptionHandler(LeaveNotFoundException.class)
+    public  ResponseEntity<ErrorResponseDTO> handleLeaveNotFound(LeaveNotFoundException ex) {
+
+        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
+                HttpStatus.NOT_FOUND.value(),
+                ex.getMessage()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(errorResponseDTO);
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ErrorResponseDTO> handleIllegalState(IllegalStateException ex){
+
+        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
+                HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(errorResponseDTO);
+    }
+
+    @ExceptionHandler(InvalidLeaveDateException.class)
+    public  ResponseEntity<ErrorResponseDTO> handleInvalidDate(InvalidLeaveDateException ex){
+
+        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
+                HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(errorResponseDTO);
+
+    }
+
+    @ExceptionHandler(InvalidLeaveOverlapException.class)
+    public  ResponseEntity<ErrorResponseDTO> handleInvalidLeaveOverlap(InvalidLeaveOverlapException ex){
+
+        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
+                HttpStatus.CONFLICT.value(),
+                ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(errorResponseDTO);
+
     }
 
 }
