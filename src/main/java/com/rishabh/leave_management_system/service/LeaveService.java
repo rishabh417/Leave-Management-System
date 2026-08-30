@@ -31,6 +31,9 @@ public class LeaveService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    @Autowired
+    private EmailService emailService;
+
     public LeaveResponseDTO applyLeave(LeaveRequestDTO leaveRequest){
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -73,6 +76,12 @@ public class LeaveService {
         leave.setAppliedDate(LocalDate.now());
 
         leaveRepository.save(leave);
+
+        emailService.sendLeaveAppliedEmail(
+                employee.getEmail(),
+                leave.getLeaveType().toString()
+        );
+
 
         return convertToLeaveResponseDTO(leave);
     }
@@ -193,6 +202,18 @@ public class LeaveService {
         leave.setStatus(LeaveStatus.APPROVED);
         leaveRepository.save(leave);
 
+
+        Employee employee = employeeRepository.findById(leave.getEmployeeId())
+                .orElseThrow(
+                        () -> new EmployeeNotFoundException("Employee with id " + leave.getEmployeeId() + " not found")
+                );
+
+
+        emailService.sendLeaveApprovedEmail(
+                employee.getEmail(),
+                leave.getLeaveType().toString()
+        );
+
         return convertToLeaveResponseDTO(leave);
 
     }
@@ -225,6 +246,16 @@ public class LeaveService {
 
         leave.setStatus(LeaveStatus.REJECTED);
         leaveRepository.save(leave);
+
+        Employee employee = employeeRepository.findById(leave.getEmployeeId())
+                .orElseThrow(
+                        () -> new EmployeeNotFoundException("Employee with id " + leave.getEmployeeId() + " not found")
+                );
+
+        emailService.sendLeaveRejectedEmail(
+                employee.getEmail(),
+                leave.getLeaveType().toString()
+        );
 
         return convertToLeaveResponseDTO(leave);
     }

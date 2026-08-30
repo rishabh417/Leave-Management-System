@@ -6,8 +6,6 @@ import com.rishabh.leave_management_system.entity.enums.LeaveStatus;
 import java.time.LocalDate;
 import java.util.List;
 
-import java.util.List;
-
 public interface LeaveRepository extends MongoRepository<Leave, String> {
 
     List<Leave> findByEmployeeId(String employeeId);
