@@ -34,4 +34,3 @@ build/
 
 # Local application secrets
 application-local.properties
-src/test/resources/application-test.properties
