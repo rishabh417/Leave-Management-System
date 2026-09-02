@@ -3,6 +3,7 @@ package com.rishabh.leave_management_system.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +14,12 @@ import java.util.Date;
 @Service
 public class JWTService {
 
-    private final SecretKey secretKey =
-            Keys.hmacShaKeyFor("ThisIsMyVerySecureSecretKeyForJwtAuthentication12345".getBytes(StandardCharsets.UTF_8)
-            );
+    private final SecretKey secretKey;
+
+    public JWTService(@Value("${jwt.secret}")  String secret) {
+
+        this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+    }
 
     public String generateToken(UserDetails userDetails){
 
